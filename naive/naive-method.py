@@ -52,10 +52,8 @@ def my_bottle(filename):
                 i[0] + new_circus, width)] == 0
             ratio_logo = np.sum(logo_area) / (2 * new_circus) ** 2
             if ratio_direction > 0.25 and ratio_logo < 0.40:
-                print('up', i[0], i[1], ratio_direction, ratio_logo)
                 up.append([[i[0], i[1]], i[2]])
             else:
-                print('down', i[0], i[1], ratio_direction, ratio_logo)
                 down.append([[i[0], i[1]], i[2]])
 
     edge_on, result = find_edge_on(img, up, down)
@@ -93,10 +91,10 @@ def in_circle(circles, point):
 # check for close points adding into centers
 def add_in_center(centers, point):
     for center in centers:
-        if (center[0] - point[0]) ** 2 + (center[1] - point[1]) ** 2 <= 100:
-            return centers
+        if (center[0] - point[0]) ** 2 + (center[1] - point[1]) ** 2 <= 1200:
+            return centers, False
     centers.append(point)
-    return centers
+    return centers, True
 
 
 def find_edge_on(img, up, down):
@@ -151,21 +149,23 @@ def find_edge_on(img, up, down):
                         break
                     start += 1
 
-                centers = add_in_center(centers, [(left_bound + right_bound) // 2, (up_bound + down_bound) // 2])
-                cv2.line(img, (left_bound, up_bound), (left_bound, down_bound), (255, 0, 0), 3)
-                cv2.line(img, (left_bound, up_bound), (right_bound, up_bound), (255, 0, 0), 3)
-                cv2.line(img, (right_bound, up_bound), (right_bound, down_bound), (255, 0, 0), 3)
-                cv2.line(img, (left_bound, down_bound), (right_bound, down_bound), (255, 0, 0), 3)
-                cv2.putText(img, 'S,%d,%d' % ((left_bound + right_bound) // 2, (up_bound + down_bound) // 2),
-                            ((left_bound + right_bound) // 2, (up_bound + down_bound) // 2),
-                            cv2.FONT_HERSHEY_COMPLEX_SMALL, 0.8, (0, 255, 0))
+                centers, flag = add_in_center(centers, [(left_bound + right_bound) // 2, (up_bound + down_bound) // 2])
+
+                if flag:
+                    cv2.line(img, (left_bound, up_bound), (left_bound, down_bound), (255, 0, 0), 3)
+                    cv2.line(img, (left_bound, up_bound), (right_bound, up_bound), (255, 0, 0), 3)
+                    cv2.line(img, (right_bound, up_bound), (right_bound, down_bound), (255, 0, 0), 3)
+                    cv2.line(img, (left_bound, down_bound), (right_bound, down_bound), (255, 0, 0), 3)
+                    cv2.putText(img, 'S,%d,%d' % ((left_bound + right_bound) // 2, (up_bound + down_bound) // 2),
+                                ((left_bound + right_bound) // 2, (up_bound + down_bound) // 2),
+                                cv2.FONT_HERSHEY_COMPLEX_SMALL, 0.8, (0, 255, 0))
             j += 1
         i += 1
     return centers, img
 
 
 if __name__ == '__main__':
-    root = 'D:/study/2019-autumn/CV/naive/images/'
+    root = './images/'
     images = os.listdir(root)
     for img in images:
         outfile, up, down, edge_on = my_bottle('%s%s' % (root, img))

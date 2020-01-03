@@ -130,3 +130,5 @@ dmypy.json
 
 .vscode/
 naive/.idea/
+naive/images/
+naive/naive-out/

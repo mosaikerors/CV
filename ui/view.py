@@ -86,9 +86,22 @@ class View(QMainWindow):
         self.MLResult.setAlignment(Qt.AlignCenter)
 
     def _TRDetect(self):
-        upStr = "upstr"
-        downStr = "downStr"
-        sideStr = "sideStr"
+        upData = [[(1, 2), 2], [(3, 3), 4], [(5, 1), 6], [(7, 2), 8]]
+        downData = [[(12, 3), 21], [(12, 51), 6], [(1, 7), 8]]
+        sideData = [[(4, 3)], [(2, 6)]]
+        
+        upStr = "Up: \n"
+        for data in upData:
+            upStr += "\t Center: (%d, %d), Radius: %d\n" % (data[0][0], data[0][1], data[1])
+
+        downStr = "Down: \n"
+        for data in downData:
+            downStr += "\t Center: (%d, %d), Radius: %d\n" % (data[0][0], data[0][1], data[1])
+        
+        sideStr = "Side: \n"
+        for data in sideData:
+            sideStr += "\t Center: (%d, %d)\n" % (data[0][0], data[0][1])
+
         self.TRUpResult.setText(upStr)
         self.TRUpResult.setAlignment(Qt.AlignCenter)
         self.TRDownResult.setText(downStr)

@@ -1,5 +1,6 @@
 import numpy as np
 import cv2
+import math
 import os
 
 
@@ -15,15 +16,15 @@ def my_bottle(filename):
 
         For example:
 
-        './naive-out/img',
+        './out/img',
         [[[100, 100], 20], [[200, 250], 30],
         [[[150, 150], 20], [[250, 200], 30],
         [[300, 300], [300, 400]] = my_bottle('./images/img')
     """
+    print(filename)
     img = cv2.imread(filename)
-    print(img)
     shape = img.shape
-    # for xyx: you will use these two variables
+    height, width = shape[0], shape[1]
     up = []
     down = []
 
@@ -34,21 +35,41 @@ def my_bottle(filename):
                                param2=20, minRadius=max(shape[0], shape[1]) // 20,
                                maxRadius=min(shape[0], shape[1]) // 10)
 
+    kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (3, 3))
+    binary_close = cv2.morphologyEx(blur, cv2.MORPH_OPEN, kernel, iterations=5)
+
     if circles is not None:
         circles = np.uint16(np.around(circles))
         for i in circles[0, :]:
-            # for xyx, please add up and down test
-            # add the result to the array: up and down in the format below
-            up.append([[i[0], i[1]], i[2]])
+            new_circus = math.floor(i[2] * 1.1)
+            black_area = binary_close[max(0, i[1] - new_circus): min(i[1] + new_circus, height), max(0, i[0]
+                                                                                                     - new_circus): min(
+                i[0] + new_circus, width)] == 0
+            ratio_direction = np.sum(black_area) / (2 * new_circus) ** 2
+
+            new_circus = math.floor(i[2] * 0.5)
+            logo_area = binary_close[max(0, i[1] - new_circus): min(i[1] + new_circus, height), max(0, i[0]
+                                                                                                    - new_circus): min(
+                i[0] + new_circus, width)] == 0
+            ratio_logo = np.sum(logo_area) / (2 * new_circus) ** 2
+            if ratio_direction > 0.25 and ratio_logo < 0.35:
+                print('up', i[0], i[1], ratio_direction, ratio_logo)
+                up.append([[i[0], i[1]], i[2]])
+            else:
+                print('down', i[0], i[1], ratio_direction, ratio_logo)
+                down.append([[i[0], i[1]], i[2]])
 
     edge_on, result = find_edge_on(img, up, down)
 
-    # draw circles in the result
-    if circles is not None:
-        circles = np.uint16(np.around(circles))
-        for i in circles[0, :]:
-            cv2.circle(result, (i[0], i[1]), i[2], (0, 255, 0), 2)
-            cv2.circle(result, (i[0], i[1]), 2, (0, 0, 255), 2)
+    # draw circles
+    for up_circle in up:
+        cv2.putText(result, 'U,%d,%d' % (up_circle[0][0], up_circle[0][1]), (up_circle[0][0], up_circle[0][1]),
+                    cv2.FONT_HERSHEY_COMPLEX_SMALL, 0.8, (0, 255, 0))
+        cv2.circle(result, (up_circle[0][0], up_circle[0][1]), up_circle[1], (0, 255, 0), 3)
+    for down_circle in down:
+        cv2.putText(result, 'D,%d,%d' % (down_circle[0][0], down_circle[0][1]), (down_circle[0][0], down_circle[0][1]),
+                    cv2.FONT_HERSHEY_COMPLEX_SMALL, 0.8, (0, 255, 0))
+        cv2.circle(result, (down_circle[0][0], down_circle[0][1]), down_circle[1], (0, 0, 255), 3)
 
     filename = './naive-out/%s' % filename.split('/')[-1]
     cv2.imwrite(filename, result)
@@ -73,7 +94,7 @@ def in_circle(circles, point):
 # check for close points adding into centers
 def add_in_center(centers, point):
     for center in centers:
-        if(center[0]-point[0])**2 + (center[1]-point[1])**2 <= 100:
+        if (center[0] - point[0]) ** 2 + (center[1] - point[1]) ** 2 <= 100:
             return centers
     centers.append(point)
     return centers
@@ -136,13 +157,17 @@ def find_edge_on(img, up, down):
                 cv2.line(img, (left_bound, up_bound), (right_bound, up_bound), (255, 0, 0), 3)
                 cv2.line(img, (right_bound, up_bound), (right_bound, down_bound), (255, 0, 0), 3)
                 cv2.line(img, (left_bound, down_bound), (right_bound, down_bound), (255, 0, 0), 3)
+                cv2.putText(img, 'S,%d,%d' % ((left_bound + right_bound) // 2, (up_bound + down_bound) // 2),
+                            ((left_bound + right_bound) // 2, (up_bound + down_bound) // 2),
+                            cv2.FONT_HERSHEY_COMPLEX_SMALL, 0.8, (0, 255, 0))
             j += 1
         i += 1
     return centers, img
 
 
 if __name__ == '__main__':
-    images = os.listdir('./images')
+    root = 'D:/study/2019-autumn/CV/naive/images/'
+    images = os.listdir(root)
     for img in images:
-        outfile, up, down, edge_on = my_bottle('./images/%s' % img)
+        outfile, up, down, edge_on = my_bottle('%s%s' % (root, img))
         print(outfile, up, down, edge_on)

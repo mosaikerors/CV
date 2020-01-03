@@ -88,6 +88,8 @@ class View(QMainWindow):
 
     def _TRDetect(self):
         outfile, up, down, edge_on = my_bottle(self.fileName)
+        print('susususu')
         self.TRUpResult.setText(up)
         self.TRDownResult.setText(down)
         self.TRSideResult.setText(edge_on)
+        print('susu2susu')

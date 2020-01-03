@@ -21,7 +21,7 @@ def my_bottle(filename):
         [[[150, 150], 20], [[250, 200], 30],
         [[300, 300], [300, 400]] = my_bottle('./images/img')
     """
-    print(filename)
+    # print(filename)
     img = cv2.imread(filename)
     shape = img.shape
     height, width = shape[0], shape[1]
@@ -53,10 +53,10 @@ def my_bottle(filename):
                 i[0] + new_circus, width)] == 0
             ratio_logo = np.sum(logo_area) / (2 * new_circus) ** 2
             if ratio_direction > 0.25 and ratio_logo < 0.35:
-                print('up', i[0], i[1], ratio_direction, ratio_logo)
+                # print('up', i[0], i[1], ratio_direction, ratio_logo)
                 up.append([[i[0], i[1]], i[2]])
             else:
-                print('down', i[0], i[1], ratio_direction, ratio_logo)
+                # print('down', i[0], i[1], ratio_direction, ratio_logo)
                 down.append([[i[0], i[1]], i[2]])
 
     edge_on, result = find_edge_on(img, up, down)

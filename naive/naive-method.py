@@ -35,19 +35,19 @@ def my_bottle(filename):
                                maxRadius=min(shape[0], shape[1]) // 10)
 
     kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (3, 3))
-    binary_close = cv2.morphologyEx(blur, cv2.MORPH_OPEN, kernel, iterations=5)
+    binary_open = cv2.morphologyEx(blur, cv2.MORPH_OPEN, kernel, iterations=5)
 
     if circles is not None:
         circles = np.uint16(np.around(circles))
         for i in circles[0, :]:
             new_circus = math.floor(i[2] * 1.1)
-            black_area = binary_close[max(0, i[1] - new_circus): min(i[1] + new_circus, height), max(0, i[0]
+            black_area = binary_open[max(0, i[1] - new_circus): min(i[1] + new_circus, height), max(0, i[0]
                                                                                                      - new_circus): min(
                 i[0] + new_circus, width)] == 0
             ratio_direction = np.sum(black_area) / (2 * new_circus) ** 2
 
             new_circus = math.floor(i[2] * 0.5)
-            logo_area = binary_close[max(0, i[1] - new_circus): min(i[1] + new_circus, height), max(0, i[0]
+            logo_area = binary_open[max(0, i[1] - new_circus): min(i[1] + new_circus, height), max(0, i[0]
                                                                                                     - new_circus): min(
                 i[0] + new_circus, width)] == 0
             ratio_logo = np.sum(logo_area) / (2 * new_circus) ** 2

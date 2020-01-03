@@ -7,6 +7,7 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPixmap, QImage
 from PyQt5.QtWidgets import QFileDialog, QTextEdit
 from ml import detect
+from naive_method import my_bottle
 
 
 class View(QMainWindow):
@@ -77,18 +78,16 @@ class View(QMainWindow):
         self.TRButton.setEnabled(True)
 
     def _MLDetect(self):
+        detect()
         self._MLDetectCallback()
 
     def _MLDetectCallback(self):
         resultFilename = self.fileName.replace("yolo-image", "yolo-result")
         print(resultFilename)
-        detect()
         self.MLResult.setPixmap(QPixmap(resultFilename))
 
     def _TRDetect(self):
-        upStr = "upstr"
-        downStr = "downStr"
-        sideStr = "sideStr"
-        self.TRUpResult.setText(upStr)
-        self.TRDownResult.setText(downStr)
-        self.TRSideResult.setText(sideStr)
+        outfile, up, down, edge_on = my_bottle(self.fileName)
+        self.TRUpResult.setText(up)
+        self.TRDownResult.setText(down)
+        self.TRSideResult.setText(edge_on)

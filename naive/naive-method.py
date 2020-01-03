@@ -15,7 +15,7 @@ def my_bottle(filename):
 
         For example:
 
-        './out/img',
+        './naive-out/img',
         [[[100, 100], 20], [[200, 250], 30],
         [[[150, 150], 20], [[250, 200], 30],
         [[300, 300], [300, 400]] = my_bottle('./images/img')
@@ -49,7 +49,7 @@ def my_bottle(filename):
             cv2.circle(result, (i[0], i[1]), i[2], (0, 255, 0), 2)
             cv2.circle(result, (i[0], i[1]), 2, (0, 0, 255), 2)
 
-    filename = './out/%s' % filename.split('/')[-1]
+    filename = './naive-out/%s' % filename.split('/')[-1]
     cv2.imwrite(filename, result)
     return filename, up, down, edge_on
 

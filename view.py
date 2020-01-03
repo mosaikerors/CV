@@ -3,10 +3,10 @@ from PyQt5.QtWidgets import QMainWindow
 from PyQt5.QtWidgets import QWidget, QLabel
 from PyQt5.QtWidgets import QPushButton, QSlider
 from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, QSize
 from PyQt5.QtGui import QPixmap, QImage
 from PyQt5.QtWidgets import QFileDialog, QTextEdit
-from ml import detect
+from ml_method import detect
 from naive_method import my_bottle
 
 
@@ -103,7 +103,7 @@ class View(QMainWindow):
 
         sideStr = "Side: \n"
         for data in sideData:
-            sideStr += "\t Center: (%d, %d)\n" % (data[0][0], data[0][1])
+            sideStr += "\t Center: (%d, %d)\n" % (data[0], data[1])
 
         self.TRUpResult.setText(upStr)
         self.TRUpResult.setAlignment(Qt.AlignCenter)

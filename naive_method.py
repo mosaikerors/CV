@@ -52,10 +52,8 @@ def my_bottle(filename):
                 i[0] + new_circus, width)] == 0
             ratio_logo = np.sum(logo_area) / (2 * new_circus) ** 2
             if ratio_direction > 0.25 and ratio_logo < 0.40:
-                print('up', i[0], i[1], ratio_direction, ratio_logo)
                 up.append([[i[0], i[1]], i[2]])
             else:
-                print('down', i[0], i[1], ratio_direction, ratio_logo)
                 down.append([[i[0], i[1]], i[2]])
 
     edge_on, result = find_edge_on(img, up, down)

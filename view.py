@@ -16,19 +16,19 @@ class View(QMainWindow):
         super(View, self).__init__()
 
         self.setWindowTitle('CV')
-        self.setFixedSize(600, 600)
+        self.setFixedSize(1200, 800)
 
         self.generalLayout = QHBoxLayout()
         self._centralWidget = QWidget(self)
         self.setCentralWidget(self._centralWidget)
         self._centralWidget.setLayout(self.generalLayout)
-        
+
         self.hasRawImage = False
 
         self._createLeftBar()
         self._createMidBar()
         self._createRightBar()
-        
+
     def _createLeftBar(self):
         leftBar = QVBoxLayout()
 
@@ -38,7 +38,7 @@ class View(QMainWindow):
 
         self.rawImage = QLabel()
         leftBar.addWidget(self.rawImage)
-        
+
         self.generalLayout.addLayout(leftBar, stretch=3)
 
     def _createMidBar(self):
@@ -72,8 +72,11 @@ class View(QMainWindow):
         self.generalLayout.addLayout(rightBar, stretch=3)
 
     def _openFileDialog(self):
-        self.fileName, self.fileType = QFileDialog.getOpenFileName(self, "Open Image", "yolo-image", "Image Files (*.png *.jpg *.bmp)")
-        self.rawImage.setPixmap(QPixmap(self.fileName))
+        self.fileName, self.fileType = QFileDialog.getOpenFileName(self, "Open Image", "yolo-image",
+                                                                   "Image Files (*.png *.jpg *.bmp)")
+        pixmap = QPixmap(self.fileName).scaled(QSize(500, 500), aspectRatioMode=Qt.KeepAspectRatio)
+        self.rawImage.setPixmap(pixmap)
+        self.rawImage.setAlignment(Qt.AlignCenter)
         self.MLButton.setEnabled(True)
         self.TRButton.setEnabled(True)
 
@@ -84,12 +87,27 @@ class View(QMainWindow):
     def _MLDetectCallback(self):
         resultFilename = self.fileName.replace("yolo-image", "yolo-result")
         print(resultFilename)
-        self.MLResult.setPixmap(QPixmap(resultFilename))
+        self.MLResult.setPixmap(QPixmap(resultFilename).scaled(QSize(500, 500), aspectRatioMode=Qt.KeepAspectRatio))
+        self.MLResult.setAlignment(Qt.AlignCenter)
 
     def _TRDetect(self):
-        outfile, up, down, edge_on = my_bottle(self.fileName)
-        print('susususu')
-        self.TRUpResult.setText(up)
-        self.TRDownResult.setText(down)
-        self.TRSideResult.setText(edge_on)
-        print('susu2susu')
+        outfile, upData, downData, sideData = my_bottle(self.fileName)
+
+        upStr = "Up: \n"
+        for data in upData:
+            upStr += "\t Center: (%d, %d), Radius: %d\n" % (data[0][0], data[0][1], data[1])
+
+        downStr = "Down: \n"
+        for data in downData:
+            downStr += "\t Center: (%d, %d), Radius: %d\n" % (data[0][0], data[0][1], data[1])
+
+        sideStr = "Side: \n"
+        for data in sideData:
+            sideStr += "\t Center: (%d, %d)\n" % (data[0][0], data[0][1])
+
+        self.TRUpResult.setText(upStr)
+        self.TRUpResult.setAlignment(Qt.AlignCenter)
+        self.TRDownResult.setText(downStr)
+        self.TRDownResult.setAlignment(Qt.AlignCenter)
+        self.TRSideResult.setText(sideStr)
+        self.TRSideResult.setAlignment(Qt.AlignCenter)

@@ -21,7 +21,6 @@ def my_bottle(filename):
         [[[150, 150], 20], [[250, 200], 30],
         [[300, 300], [300, 400]] = my_bottle('./images/img')
     """
-    # print(filename)
     img = cv2.imread(filename)
     shape = img.shape
     height, width = shape[0], shape[1]
@@ -36,27 +35,27 @@ def my_bottle(filename):
                                maxRadius=min(shape[0], shape[1]) // 10)
 
     kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (3, 3))
-    binary_close = cv2.morphologyEx(blur, cv2.MORPH_OPEN, kernel, iterations=5)
+    binary_open = cv2.morphologyEx(blur, cv2.MORPH_OPEN, kernel, iterations=5)
 
     if circles is not None:
         circles = np.uint16(np.around(circles))
         for i in circles[0, :]:
             new_circus = math.floor(i[2] * 1.1)
-            black_area = binary_close[max(0, i[1] - new_circus): min(i[1] + new_circus, height), max(0, i[0]
+            black_area = binary_open[max(0, i[1] - new_circus): min(i[1] + new_circus, height), max(0, i[0]
                                                                                                      - new_circus): min(
                 i[0] + new_circus, width)] == 0
             ratio_direction = np.sum(black_area) / (2 * new_circus) ** 2
 
             new_circus = math.floor(i[2] * 0.5)
-            logo_area = binary_close[max(0, i[1] - new_circus): min(i[1] + new_circus, height), max(0, i[0]
+            logo_area = binary_open[max(0, i[1] - new_circus): min(i[1] + new_circus, height), max(0, i[0]
                                                                                                     - new_circus): min(
                 i[0] + new_circus, width)] == 0
             ratio_logo = np.sum(logo_area) / (2 * new_circus) ** 2
-            if ratio_direction > 0.25 and ratio_logo < 0.35:
-                # print('up', i[0], i[1], ratio_direction, ratio_logo)
+            if ratio_direction > 0.25 and ratio_logo < 0.40:
+                print('up', i[0], i[1], ratio_direction, ratio_logo)
                 up.append([[i[0], i[1]], i[2]])
             else:
-                # print('down', i[0], i[1], ratio_direction, ratio_logo)
+                print('down', i[0], i[1], ratio_direction, ratio_logo)
                 down.append([[i[0], i[1]], i[2]])
 
     edge_on, result = find_edge_on(img, up, down)

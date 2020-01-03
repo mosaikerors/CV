@@ -3,7 +3,7 @@ from PyQt5.QtWidgets import QMainWindow
 from PyQt5.QtWidgets import QWidget, QLabel
 from PyQt5.QtWidgets import QPushButton, QSlider
 from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, QSize
 from PyQt5.QtGui import QPixmap, QImage
 from PyQt5.QtWidgets import QFileDialog, QTextEdit
 
@@ -13,7 +13,7 @@ class View(QMainWindow):
         super(View, self).__init__()
 
         self.setWindowTitle('CV')
-        self.setFixedSize(600, 600)
+        self.setFixedSize(1200, 800)
 
         self.generalLayout = QHBoxLayout()
         self._centralWidget = QWidget(self)
@@ -70,7 +70,9 @@ class View(QMainWindow):
 
     def _openFileDialog(self):
         self.fileName, self.fileType = QFileDialog.getOpenFileName(self, "Open Image", "yolo-image", "Image Files (*.png *.jpg *.bmp)")
-        self.rawImage.setPixmap(QPixmap(self.fileName))
+        pixmap = QPixmap(self.fileName).scaled(QSize(500, 500), aspectRatioMode=Qt.KeepAspectRatio)
+        self.rawImage.setPixmap(pixmap)
+        self.rawImage.setAlignment(Qt.AlignCenter)
         self.MLButton.setEnabled(True)
         self.TRButton.setEnabled(True)
 
@@ -80,12 +82,16 @@ class View(QMainWindow):
     def _MLDetectCallback(self):
         resultFilename = self.fileName.replace("yolo-image", "yolo-result")
         print(resultFilename)
-        self.MLResult.setPixmap(QPixmap(resultFilename))
+        self.MLResult.setPixmap(QPixmap(resultFilename).scaled(QSize(500, 500), aspectRatioMode=Qt.KeepAspectRatio))
+        self.MLResult.setAlignment(Qt.AlignCenter)
 
     def _TRDetect(self):
         upStr = "upstr"
         downStr = "downStr"
         sideStr = "sideStr"
         self.TRUpResult.setText(upStr)
+        self.TRUpResult.setAlignment(Qt.AlignCenter)
         self.TRDownResult.setText(downStr)
+        self.TRDownResult.setAlignment(Qt.AlignCenter)
         self.TRSideResult.setText(sideStr)
+        self.TRSideResult.setAlignment(Qt.AlignCenter)

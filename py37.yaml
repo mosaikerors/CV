@@ -1,0 +1,65 @@
+name: py37
+channels:
+  - pytorch
+  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free
+  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/
+  - defaults
+dependencies:
+  - ca-certificates=2019.11.27=0
+  - certifi=2019.11.28=py37_0
+  - cffi=1.11.5=py37h74b6da3_1
+  - cycler=0.10.0=py37_0
+  - freetype=2.9.1=ha9979f8_1
+  - icc_rt=2019.0.0=h0cc432a_1
+  - intel-openmp=2019.4=245
+  - kiwisolver=1.0.1=py37h6538335_0
+  - libpng=1.6.34=h79bbb47_0
+  - libtiff=4.0.9=h36446d0_2
+  - matplotlib=2.2.2=py37had4c4a9_2
+  - mkl=2018.0.3=1
+  - mkl_fft=1.0.6=py37hdbbee80_0
+  - mkl_random=1.0.1=py37h77b88f5_1
+  - msys2-conda-epoch=20160418=1
+  - numpy=1.15.4=py37ha559c80_0
+  - numpy-base=1.15.4=py37h8128ebf_0
+  - olefile=0.46=py_0
+  - pillow=5.2.0=py37h08bbbbd_0
+  - pip=19.3.1=py37_0
+  - pycparser=2.19=py_0
+  - pyparsing=2.4.5=py_0
+  - pyqt=5.6.0=py37ha878b3d_6
+  - python=3.7.0=hea74fb7_0
+  - python-dateutil=2.8.1=py_0
+  - pytz=2019.3=py_0
+  - setuptools=42.0.2=py37_0
+  - sip=4.18.1=py37h6538335_2
+  - six=1.13.0=py37_0
+  - tbb=2018.0.5=he980bc4_0
+  - tbb4py=2018.0.5=py37he980bc4_0
+  - tk=8.6.8=hfa6e2cd_0
+  - tornado=5.1.1=py37hfa6e2cd_0
+  - tqdm=4.40.2=py_0
+  - vs2015_runtime=14.16.27012=hf0eaf9b_1
+  - wheel=0.33.6=py37_0
+  - wincertstore=0.2=py37_0
+  - blas=1.0=mkl
+  - icu=57.1=vc14_0
+  - jpeg=9b=vc14_0
+  - ninja=1.7.2=0
+  - openssl=1.0.2l=vc14_0
+  - qt=5.6.2=vc14_6
+  - sqlite=3.13.0=vc14_1
+  - vc=14=0
+  - zlib=1.2.11=vc14_0
+  - cpuonly=1.0=0
+  - pip:
+    - altgraph==0.16.1
+    - future==0.18.2
+    - opencv-python==4.1.2.30
+    - pefile==2019.4.18
+    - pyinstaller==4.0.dev0+9dd34bdfba
+    - pywin32-ctypes==0.2.0
+    - torch==1.3.1+cpu
+    - torchvision==0.4.2+cpu
+prefix: D:\Anaconda3\anaconda3\envs\py37
+

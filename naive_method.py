@@ -91,7 +91,7 @@ def in_circle(circles, point):
 # check for close points adding into centers
 def add_in_center(centers, point):
     for center in centers:
-        if (center[0] - point[0]) ** 2 + (center[1] - point[1]) ** 2 <= 100:
+        if (center[0] - point[0]) ** 2 + (center[1] - point[1]) ** 2 <= 10000:
             return centers
     centers.append(point)
     return centers

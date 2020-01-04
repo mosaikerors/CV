@@ -61,11 +61,11 @@ def my_bottle(filename):
     # draw circles
     for up_circle in up:
         cv2.putText(result, 'U,%d,%d' % (up_circle[0][0], up_circle[0][1]), (up_circle[0][0], up_circle[0][1]),
-                    cv2.FONT_HERSHEY_COMPLEX_SMALL, 0.8, (0, 255, 0))
+                    cv2.FONT_HERSHEY_COMPLEX_SMALL, 1, (0, 255, 0))
         cv2.circle(result, (up_circle[0][0], up_circle[0][1]), up_circle[1], (0, 255, 0), 3)
     for down_circle in down:
         cv2.putText(result, 'D,%d,%d' % (down_circle[0][0], down_circle[0][1]), (down_circle[0][0], down_circle[0][1]),
-                    cv2.FONT_HERSHEY_COMPLEX_SMALL, 0.8, (0, 255, 0))
+                    cv2.FONT_HERSHEY_COMPLEX_SMALL, 1, (0, 255, 0))
         cv2.circle(result, (down_circle[0][0], down_circle[0][1]), down_circle[1], (0, 0, 255), 3)
 
     filename = './naive-out/%s' % filename.split('/')[-1]
@@ -156,7 +156,7 @@ def find_edge_on(img, up, down):
                 cv2.line(img, (left_bound, down_bound), (right_bound, down_bound), (255, 0, 0), 3)
                 cv2.putText(img, 'S,%d,%d' % ((left_bound + right_bound) // 2, (up_bound + down_bound) // 2),
                             ((left_bound + right_bound) // 2, (up_bound + down_bound) // 2),
-                            cv2.FONT_HERSHEY_COMPLEX_SMALL, 0.8, (0, 255, 0))
+                            cv2.FONT_HERSHEY_COMPLEX_SMALL, 1, (0, 255, 0))
             j += 1
         i += 1
     return centers, img

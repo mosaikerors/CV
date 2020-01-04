@@ -6,7 +6,7 @@ from utils.datasets import *
 from utils.utils import *
 
 
-def detect(save_txt=False, save_img=False):
+def detect(opt_source='yolo-image', opt_output='yolo-result', save_txt=False, save_img=False):
     opt_cfg = 'cfg/yolov3-tiny.cfg'
     opt_conf_thres = 0.3
     opt_device = ''
@@ -15,8 +15,6 @@ def detect(save_txt=False, save_img=False):
     opt_img_size = 416
     opt_names = 'data/jy.names'
     opt_nms_thres = 0.5
-    opt_output = 'yolo-result'
-    opt_source = 'yolo-image'
     opt_view_img = False
     opt_weights = 'weights/backup490.pt'
     with torch.no_grad():
@@ -134,7 +132,6 @@ def detect(save_txt=False, save_img=False):
                             plot_one_box(xyxy, im0, label=label, color=colors[int(cls)])
 
                 print('%sDone. (%.3fs)' % (s, time.time() - t))
-
                 # Stream results
                 if view_img:
                     cv2.imshow(p, im0)

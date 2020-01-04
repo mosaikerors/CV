@@ -36,28 +36,18 @@ class View(QMainWindow):
         self.rawImage = QLabel()
         leftBar.addWidget(self.rawImage)
         
-        self.generalLayout.addLayout(leftBar, stretch=3)
+        self.generalLayout.addLayout(leftBar, stretch=1)
 
     def _createMidBar(self):
-        midBar = QVBoxLayout()
-
-        self.MLButton = QPushButton("machine learning")
-        self.MLButton.clicked.connect(self._MLDetect)
-        self.MLButton.setEnabled(False)
-        midBar.addWidget(self.MLButton)
+        rightBar = QVBoxLayout()
 
         self.TRButton = QPushButton("traditional approach")
         self.TRButton.clicked.connect(self._TRDetect)
         self.TRButton.setEnabled(False)
-        midBar.addWidget(self.TRButton)
+        rightBar.addWidget(self.TRButton)
 
-        self.generalLayout.addLayout(midBar, stretch=1)
-
-    def _createRightBar(self):
-        rightBar = QVBoxLayout()
-
-        self.MLResult = QLabel()
-        rightBar.addWidget(self.MLResult)
+        self.TRResult = QLabel()
+        rightBar.addWidget(self.TRResult)
 
         self.TRUpResult = QLabel()
         rightBar.addWidget(self.TRUpResult)
@@ -66,7 +56,22 @@ class View(QMainWindow):
         self.TRSideResult = QLabel()
         rightBar.addWidget(self.TRSideResult)
 
-        self.generalLayout.addLayout(rightBar, stretch=3)
+        self.generalLayout.addLayout(rightBar, stretch=1)
+
+    def _createRightBar(self):
+        midBar = QVBoxLayout()
+
+        self.MLButton = QPushButton("machine learning")
+        self.MLButton.clicked.connect(self._MLDetect)
+        self.MLButton.setEnabled(False)
+        midBar.addWidget(self.MLButton)
+
+        self.MLResult = QLabel()
+        midBar.addWidget(self.MLResult)
+
+        self.generalLayout.addLayout(midBar, stretch=1)
+
+
 
     def _openFileDialog(self):
         self.fileName, self.fileType = QFileDialog.getOpenFileName(self, "Open Image", "yolo-image", "Image Files (*.png *.jpg *.bmp)")
@@ -86,6 +91,7 @@ class View(QMainWindow):
         self.MLResult.setAlignment(Qt.AlignCenter)
 
     def _TRDetect(self):
+        resultFilename = self.fileName
         upData = [[(1, 2), 2], [(3, 3), 4], [(5, 1), 6], [(7, 2), 8]]
         downData = [[(12, 3), 21], [(12, 51), 6], [(1, 7), 8]]
         sideData = [[(4, 3)], [(2, 6)]]
@@ -102,6 +108,8 @@ class View(QMainWindow):
         for data in sideData:
             sideStr += "\t Center: (%d, %d)\n" % (data[0][0], data[0][1])
 
+        self.TRResult.setPixmap(QPixmap(resultFilename).scaled(QSize(500, 500), aspectRatioMode=Qt.KeepAspectRatio))
+        self.TRResult.setAlignment(Qt.AlignCenter)
         self.TRUpResult.setText(upStr)
         self.TRUpResult.setAlignment(Qt.AlignCenter)
         self.TRDownResult.setText(downStr)

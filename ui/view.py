@@ -6,6 +6,8 @@ from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout
 from PyQt5.QtCore import Qt, QSize
 from PyQt5.QtGui import QPixmap, QImage
 from PyQt5.QtWidgets import QFileDialog, QTextEdit
+import cv2
+import os
 
 class View(QMainWindow):
 
@@ -71,10 +73,8 @@ class View(QMainWindow):
 
         self.generalLayout.addLayout(midBar, stretch=1)
 
-
-
     def _openFileDialog(self):
-        self.fileName, self.fileType = QFileDialog.getOpenFileName(self, "Open Image", "yolo-image", "Image Files (*.png *.jpg *.bmp)")
+        self.fileName, self.fileType = QFileDialog.getOpenFileName(self, "Open Image", ".", "Image Files (*.png *.jpg *.bmp)")
         pixmap = QPixmap(self.fileName).scaled(QSize(500, 500), aspectRatioMode=Qt.KeepAspectRatio)
         self.rawImage.setPixmap(pixmap)
         self.rawImage.setAlignment(Qt.AlignCenter)
@@ -82,13 +82,19 @@ class View(QMainWindow):
         self.TRButton.setEnabled(True)
 
     def _MLDetect(self):
+        tmpImage = cv2.imread(self.fileName)
+        pos = self.fileName.rfind("/")
+        self.yoloFilename = self.fileName[:pos] + "/yolo-image" + self.fileName[pos:]
+        cv2.imwrite(self.yoloFilename, tmpImage)
+
         self._MLDetectCallback()
 
     def _MLDetectCallback(self):
-        resultFilename = self.fileName.replace("yolo-image", "yolo-result")
-        print(resultFilename)
+        resultFilename = self.yoloFilename.replace("yolo-image", "yolo-result")
         self.MLResult.setPixmap(QPixmap(resultFilename).scaled(QSize(500, 500), aspectRatioMode=Qt.KeepAspectRatio))
         self.MLResult.setAlignment(Qt.AlignCenter)
+        os.remove(self.yoloFilename)
+        os.remove(resultFilename)
 
     def _TRDetect(self):
         resultFilename = self.fileName

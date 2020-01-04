@@ -15,7 +15,7 @@ class View(QMainWindow):
         super(View, self).__init__()
 
         self.setWindowTitle('CV')
-        self.setFixedSize(1200, 800)
+        self.setFixedSize(1600, 800)
 
         self.generalLayout = QHBoxLayout()
         self._centralWidget = QWidget(self)
@@ -50,13 +50,6 @@ class View(QMainWindow):
 
         self.TRResult = QLabel()
         rightBar.addWidget(self.TRResult)
-
-        self.TRUpResult = QLabel()
-        rightBar.addWidget(self.TRUpResult)
-        self.TRDownResult = QLabel()
-        rightBar.addWidget(self.TRDownResult)
-        self.TRSideResult = QLabel()
-        rightBar.addWidget(self.TRSideResult)
 
         self.generalLayout.addLayout(rightBar, stretch=1)
 
@@ -98,27 +91,6 @@ class View(QMainWindow):
 
     def _TRDetect(self):
         resultFilename = self.fileName
-        upData = [[(1, 2), 2], [(3, 3), 4], [(5, 1), 6], [(7, 2), 8]]
-        downData = [[(12, 3), 21], [(12, 51), 6], [(1, 7), 8]]
-        sideData = [[(4, 3)], [(2, 6)]]
-        
-        upStr = "Up: \n"
-        for data in upData:
-            upStr += "\t Center: (%d, %d), Radius: %d\n" % (data[0][0], data[0][1], data[1])
-
-        downStr = "Down: \n"
-        for data in downData:
-            downStr += "\t Center: (%d, %d), Radius: %d\n" % (data[0][0], data[0][1], data[1])
-        
-        sideStr = "Side: \n"
-        for data in sideData:
-            sideStr += "\t Center: (%d, %d)\n" % (data[0][0], data[0][1])
 
         self.TRResult.setPixmap(QPixmap(resultFilename).scaled(QSize(500, 500), aspectRatioMode=Qt.KeepAspectRatio))
         self.TRResult.setAlignment(Qt.AlignCenter)
-        self.TRUpResult.setText(upStr)
-        self.TRUpResult.setAlignment(Qt.AlignCenter)
-        self.TRDownResult.setText(downStr)
-        self.TRDownResult.setAlignment(Qt.AlignCenter)
-        self.TRSideResult.setText(sideStr)
-        self.TRSideResult.setAlignment(Qt.AlignCenter)

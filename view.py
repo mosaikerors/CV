@@ -18,7 +18,7 @@ class View(QMainWindow):
         super(View, self).__init__()
 
         self.setWindowTitle('CV')
-        self.setFixedSize(1200, 800)
+        self.setFixedSize(1300, 800)
 
         self.generalLayout = QHBoxLayout()
         self._centralWidget = QWidget(self)
@@ -54,13 +54,6 @@ class View(QMainWindow):
         self.TRResult = QLabel()
         rightBar.addWidget(self.TRResult)
 
-        self.TRUpResult = QLabel()
-        rightBar.addWidget(self.TRUpResult)
-        self.TRDownResult = QLabel()
-        rightBar.addWidget(self.TRDownResult)
-        self.TRSideResult = QLabel()
-        rightBar.addWidget(self.TRSideResult)
-
         self.generalLayout.addLayout(rightBar, stretch=1)
 
     def _createRightBar(self):
@@ -79,7 +72,7 @@ class View(QMainWindow):
     def _openFileDialog(self):
         self.fileName, self.fileType = QFileDialog.getOpenFileName(self, "Open Image", ".",
                                                                    "Image Files (*.png *.jpg *.bmp)")
-        pixmap = QPixmap(self.fileName).scaled(QSize(500, 500), aspectRatioMode=Qt.KeepAspectRatio)
+        pixmap = QPixmap(self.fileName).scaled(QSize(400, 400), aspectRatioMode=Qt.KeepAspectRatio)
         self.rawImage.setPixmap(pixmap)
         self.rawImage.setAlignment(Qt.AlignCenter)
         self.MLButton.setEnabled(True)
@@ -95,7 +88,7 @@ class View(QMainWindow):
 
     def _MLDetectCallback(self):
         resultFilename = self.yoloFilename.replace("yolo-image", "yolo-result")
-        self.MLResult.setPixmap(QPixmap(resultFilename).scaled(QSize(500, 500), aspectRatioMode=Qt.KeepAspectRatio))
+        self.MLResult.setPixmap(QPixmap(resultFilename).scaled(QSize(400, 400), aspectRatioMode=Qt.KeepAspectRatio))
         self.MLResult.setAlignment(Qt.AlignCenter)
         os.remove(self.yoloFilename)
         os.remove(resultFilename)
@@ -103,23 +96,5 @@ class View(QMainWindow):
     def _TRDetect(self):
         outfile, upData, downData, sideData = my_bottle(self.fileName)
 
-        # upStr = "Up: \n"
-        # for data in upData:
-        #     upStr += "\t Center: (%d, %d), Radius: %d\n" % (data[0][0], data[0][1], data[1])
-        #
-        # downStr = "Down: \n"
-        # for data in downData:
-        #     downStr += "\t Center: (%d, %d), Radius: %d\n" % (data[0][0], data[0][1], data[1])
-        #
-        # sideStr = "Side: \n"
-        # for data in sideData:
-        #     sideStr += "\t Center: (%d, %d)\n" % (data[0], data[1])
-
-        self.TRResult.setPixmap(QPixmap(outfile).scaled(QSize(500, 500), aspectRatioMode=Qt.KeepAspectRatio))
+        self.TRResult.setPixmap(QPixmap(outfile).scaled(QSize(400, 400), aspectRatioMode=Qt.KeepAspectRatio))
         self.TRResult.setAlignment(Qt.AlignCenter)
-        # self.TRUpResult.setText(upStr)
-        # self.TRUpResult.setAlignment(Qt.AlignCenter)
-        # self.TRDownResult.setText(downStr)
-        # self.TRDownResult.setAlignment(Qt.AlignCenter)
-        # self.TRSideResult.setText(sideStr)
-        # self.TRSideResult.setAlignment(Qt.AlignCenter)
